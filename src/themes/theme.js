@@ -20,7 +20,7 @@ import { StyleSheet, Platform } from "react-native"
         android: 'Arial',
         default: 'black'
     })
-}
+};
 
 
 export const Styles = StyleSheet.create({
@@ -29,7 +29,8 @@ export const Styles = StyleSheet.create({
         fontSize: themes.fontSize.body,
         fontFamily: themes.fonts.main,
         fontWeight: themes.fontWeights.normal,
-        padding: 5
+        paddingTop: 5,
+        paddingBottom: 5
     },
     subHeading: {
         color: themes.color.textPrimary,

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent:'center',
-        padding: 20,
+        padding: 15,
         backgroundColor: 'white'
     },
     MinContainer1: {

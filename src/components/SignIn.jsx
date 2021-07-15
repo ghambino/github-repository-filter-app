@@ -1,87 +1,54 @@
 import React from 'react';
-import { Formik, useField } from 'formik';
-import { View, StyleSheet, Pressable, Text, TextInput } from 'react-native';
-import * as yup from 'yup';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { useHistory } from 'react-router-native';
 
+import useSignIn from '../hook/useSignIn';
+import SignInForm from './signInForm';
 
-
-import { Styles } from '../themes/theme';
-import FormikTextInput from './FormikTextInput';
 
 const initialValues = {
     username: '',
     password: ''
-}
-
-const validationSchema = yup.object().shape({
-  username: yup.mixed().required('username is required'),
-  password: yup.mixed().required('password is required')
-})
+};
 
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 20,
-        backgroundColor: 'white'
-    }, 
-    buton: {
-        backgroundColor:  Styles.colorPrimary.color,
-        padding: 20,
-        borderRadius: 3,
-        marginTop: 12,
-        borderColor: 'red'
-    },
-    text: {
-        textAlign: 'center',
-       color: 'white',
-        fontWeight: 'bold'
-    }
-})
+const validationSchema = Yup.object({
+  username: Yup
+    .string()
+    .max(20, 'username exceed number of character')
+    .required('username is required'),
 
-const SignInForm = ({onSubmit}) => {
-
-    // const conditionalStyle = [
-    //     styles.form,
-    //     error && styles.formError
-    // ]
+  password: Yup
+    .string()
+    .min(4, 'too short character')
+    .required('password is required')
+});
 
 
 
-    // const [userfield, usermeta, userhelpers] = useField('username');
-    // const [passfield, passmeta, passhelpers] = useField('password');
-    return(
-        <View style={styles.container}>
-                {/* <TextInput 
-                    placeholder='Username'
-                    value={userfield.value}
-                    onChange={text => userhelpers.setValue(text)}
-                    style={styles.form}               
-                />
-                <TextInput 
-                    placeholder='Password'
-                    value={passfield.value}
-                    onChange={text => passhelpers.setValue(text)} 
-                    style={styles.form}              
-                />
-                 <Pressable onPress={onSubmit} style={styles.buton}>
-                <Text style={styles.text}> Sign In</Text>
-                </Pressable>  */}
 
-             <FormikTextInput name='username' placeholder="Username" />
-            <FormikTextInput name='password' placeholder="Password" />
-            <Pressable style={styles.buton}>
-                <Text style={styles.text}> Sign In</Text>
-            </Pressable> 
-        </View>
-    )
-}
 
 const SignIn = () => {
-    
-    const onSubmit = (values) => {
-        console.log(values);
-      };
-    
+    const [ signIn, errorMessage ] = useSignIn();
+    const history = useHistory()
+
+    const onSubmit =  async (values) => {
+
+        const {username, password} = values
+        
+        try {
+            await signIn({username, password});
+            history.push("/");
+        }
+        catch (error){
+            console.log(error)
+            console.log(errorMessage)
+        }
+    };
+
+
+  
     return (
         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 
